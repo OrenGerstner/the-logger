@@ -12,7 +12,7 @@ import type { Session } from '@/domain/types';
 import styles from './PastSessions.module.css';
 
 export function PastSessions() {
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const { activeSession, deleteSession } = useSession();
   const { clearDraft } = useHand();
   const { settings } = useSettings();
