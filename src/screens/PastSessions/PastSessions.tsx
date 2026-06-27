@@ -48,6 +48,7 @@ export function PastSessions() {
             currency={settings.currency}
             isActive={s.id === activeSession?.id}
             onDelete={() => setConfirmId(s.id)}
+            onTap={() => navigate({ name: 'sessionDetail', params: { sessionId: s.id } })}
           />
         ))}
       </div>
@@ -86,11 +87,13 @@ function SessionRow({
   currency,
   isActive,
   onDelete,
+  onTap,
 }: {
   session: Session;
   currency: string;
   isActive: boolean;
   onDelete(): void;
+  onTap(): void;
 }) {
   const hands = useLiveQuery(() => handRepo.getBySession(session.id), [session.id]) ?? [];
 
@@ -109,7 +112,7 @@ function SessionRow({
 
   return (
     <div className={styles.row}>
-      <div className={styles.rowInfo}>
+      <button className={styles.rowInfo} onClick={onTap}>
         <span className={styles.rowDate}>{date}</span>
         <span className={styles.rowMeta}>
           {currency}{session.stakes.smallBlind}/{currency}{session.stakes.bigBlind}
@@ -117,7 +120,7 @@ function SessionRow({
           {' · '}{hands.length} hands · {formatElapsedTime(elapsed)}
         </span>
         {isActive && <span className={styles.activeBadge}>active</span>}
-      </div>
+      </button>
       <button className={styles.deleteBtn} onClick={onDelete}>🗑</button>
     </div>
   );

@@ -8,6 +8,7 @@ import { PostflopScreen } from '@/screens/Postflop/PostflopScreen';
 import { HandResult } from '@/screens/HandResult/HandResult';
 import { HandHistory } from '@/screens/HandHistory/HandHistory';
 import { PastSessions } from '@/screens/PastSessions/PastSessions';
+import { SessionDetail } from '@/screens/SessionDetail/SessionDetail';
 import { Settings } from '@/screens/Settings/Settings';
 
 export function App() {
@@ -27,6 +28,7 @@ export function App() {
       {name === 'handResult' && <HandResult />}
       {name === 'handHistory' && <HandHistory />}
       {name === 'pastSessions' && <PastSessions />}
+      {name === 'sessionDetail' && <SessionDetail />}
       {name === 'settings' && <Settings />}
     </div>
   );

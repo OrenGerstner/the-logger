@@ -10,6 +10,7 @@ export type ScreenName =
   | 'handResult'
   | 'handHistory'
   | 'pastSessions'
+  | 'sessionDetail'
   | 'settings';
 
 export interface Screen {

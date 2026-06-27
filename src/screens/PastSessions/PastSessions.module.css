@@ -29,6 +29,12 @@
   gap: 3px;
   flex: 1;
   min-width: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .rowDate {

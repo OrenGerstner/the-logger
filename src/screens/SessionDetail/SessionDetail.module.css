@@ -1,0 +1,124 @@
+.back {
+  background: none;
+  border: none;
+  color: var(--it);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 0 14px;
+  border-bottom: 0.5px solid var(--bt);
+  margin-bottom: 4px;
+}
+
+.headerDate {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--t1);
+}
+
+.headerMeta {
+  font-size: 12px;
+  color: var(--t3);
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 0 6px;
+}
+
+.section {
+  border-radius: 10px;
+  background: var(--secondary);
+  padding: 2px 12px;
+  margin-bottom: 4px;
+}
+
+.row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 0.5px solid var(--bt);
+}
+
+.row2:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--t2);
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.streetHeader {
+  display: flex;
+  align-items: center;
+  padding: 6px 0 2px;
+}
+
+.streetRow {
+  display: flex;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 0.5px solid var(--bt);
+}
+
+.streetRow:last-child {
+  border-bottom: none;
+}
+
+.streetLabel {
+  flex: 1;
+  font-size: 13px;
+  color: var(--t2);
+}
+
+.colN {
+  width: 40px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.colPct {
+  width: 44px;
+  text-align: right;
+  font-size: 12px;
+  color: var(--t3);
+}
+
+.chartWrap {
+  background: var(--secondary);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.chart {
+  display: block;
+}
