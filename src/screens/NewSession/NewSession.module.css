@@ -1,0 +1,16 @@
+.stakesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.customStakes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slash {
+  color: var(--t2);
+  font-size: 16px;
+}

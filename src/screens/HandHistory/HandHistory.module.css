@@ -1,0 +1,58 @@
+.back {
+  background: none;
+  border: none;
+  color: var(--it);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.handList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.handRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 0.5px solid var(--bt);
+}
+
+.handInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.handResult {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.deviationMark {
+  color: var(--dt);
+  font-size: 13px;
+}
+
+.offChartBadge {
+  font-size: 9px;
+  background: var(--wb);
+  color: var(--wt);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-weight: 600;
+}

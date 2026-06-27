@@ -1,0 +1,102 @@
+.back {
+  background: none;
+  border: none;
+  color: var(--it);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--bt);
+}
+
+.rowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.rowDate {
+  font-size: 14px;
+  color: var(--t1);
+  font-weight: 500;
+}
+
+.rowMeta {
+  font-size: 11px;
+  color: var(--t3);
+}
+
+.activeBadge {
+  font-size: 10px;
+  color: var(--it);
+  background: var(--ib);
+  border-radius: 4px;
+  padding: 1px 5px;
+  align-self: flex-start;
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--dt);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.deleteBtn:active {
+  opacity: 0.6;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 40;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--primary);
+  border-radius: 14px;
+  border: 0.5px solid var(--bs);
+  padding: 20px 16px;
+  width: min(320px, 90vw);
+  z-index: 41;
+}
+
+.modalTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.modalDesc {
+  font-size: 12px;
+  color: var(--t2);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}

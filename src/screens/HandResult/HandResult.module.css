@@ -1,0 +1,12 @@
+.handRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vsLabel {
+  font-size: 11px;
+  color: var(--t3);
+  margin: 0 4px;
+}

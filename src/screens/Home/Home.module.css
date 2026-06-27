@@ -1,0 +1,77 @@
+.logoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 8px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--t1);
+}
+
+.settingsBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--t2);
+}
+
+.sessionCard {
+  background: var(--secondary);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.sessionStakes {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.venue {
+  font-size: 13px;
+  color: var(--t2);
+  font-weight: 400;
+}
+
+.sessionMeta {
+  font-size: 12px;
+  color: var(--t2);
+  margin-top: 4px;
+}
+
+.emptyState {
+  text-align: center;
+  margin-top: 60px;
+  color: var(--t2);
+  font-size: 15px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 40;
+}
+
+.modal {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--primary);
+  border-radius: 14px;
+  border: 0.5px solid var(--bs);
+  padding: 18px 16px;
+  width: min(320px, 90vw);
+  z-index: 41;
+}
+
+.modalTitle {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 4px;
+  text-align: center;
+}

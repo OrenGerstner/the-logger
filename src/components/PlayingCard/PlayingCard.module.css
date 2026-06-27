@@ -1,0 +1,35 @@
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 46px;
+  border: 0.5px solid var(--bs);
+  border-radius: 6px;
+  background: var(--primary);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--t1);
+  flex-shrink: 0;
+}
+
+.sm {
+  width: 22px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.placeholder {
+  border-style: dashed;
+  color: var(--t3);
+  font-size: 14px;
+}
+
+.dimmed {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.red {
+  color: var(--dt);
+}

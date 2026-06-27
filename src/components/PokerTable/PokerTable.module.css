@@ -1,0 +1,220 @@
+.tableWrap {
+  position: relative;
+  width: 300px;
+  margin: 4px auto 0;
+}
+
+.table {
+  position: relative;
+  width: 300px;
+  height: 220px;
+}
+
+.felt {
+  position: absolute;
+  left: 28px;
+  top: 18px;
+  right: 28px;
+  bottom: 18px;
+  border-radius: 50%;
+  border: 0.5px solid var(--bs);
+  background: var(--ib);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hint {
+  font-size: 11px;
+  color: var(--it);
+  text-align: center;
+  padding: 0 14px;
+  white-space: pre-line;
+}
+
+.seat {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: center;
+  border: 0.5px solid var(--bs);
+  background: var(--secondary);
+  color: var(--t2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  transition: transform 0.08s;
+  user-select: none;
+}
+
+.seat:active {
+  transform: scale(0.91);
+}
+
+.you {
+  background: var(--ib);
+  color: var(--it);
+  border: 2px solid var(--ibd);
+}
+
+.empty {
+  border-style: dashed;
+  color: var(--t3);
+  background: transparent;
+}
+
+.raise {
+  background: var(--db);
+  color: var(--dt);
+  border-color: var(--dbd);
+}
+
+.btn {
+  border: 2px solid var(--wbd);
+}
+
+.raiseLvl {
+  font-size: 8px;
+  margin-top: 1px;
+  font-weight: 600;
+}
+
+.dealerBtn {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--wb);
+  color: var(--wt);
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid var(--wbd);
+}
+
+/* Seat number label outside the circle */
+.seatNum {
+  position: absolute;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--t3);
+  pointer-events: none;
+  line-height: 1;
+  width: 12px;
+  text-align: center;
+}
+
+/* Action popover */
+.popoverOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+}
+
+.popover {
+  background: var(--primary);
+  border: 0.5px solid var(--bs);
+  border-radius: 10px;
+  width: 152px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.popoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--secondary);
+  padding: 6px 8px 6px 11px;
+}
+
+.popoverTitle {
+  font-size: 11px;
+  color: var(--t2);
+}
+
+.popoverX {
+  background: none;
+  border: none;
+  color: var(--t3);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popoverX:active {
+  background: var(--primary);
+}
+
+.popoverOpt {
+  width: 100%;
+  padding: 10px 11px;
+  font-size: 13px;
+  border: none;
+  border-top: 0.5px solid var(--bt);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--t1);
+  background: transparent;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.popoverOpt:active {
+  background: var(--secondary);
+}
+
+.info { color: var(--it); }
+.danger { color: var(--dt); }
+
+/* Dialog */
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 40;
+}
+
+.dialogContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--primary);
+  border-radius: 14px;
+  border: 0.5px solid var(--bs);
+  padding: 18px 16px;
+  width: min(320px, 90vw);
+  text-align: center;
+  z-index: 41;
+}
+
+.dialogTitle {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+
+.dialogDesc {
+  font-size: 12px;
+  color: var(--t2);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
