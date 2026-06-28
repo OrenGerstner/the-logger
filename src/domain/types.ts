@@ -34,6 +34,12 @@ export interface TimePause {
   endedAt: string;
 }
 
+export interface SessionTarget {
+  type: 'multiplier' | 'amount';
+  multiplier?: 2 | 3 | 4 | 5;
+  amount?: number;
+}
+
 export interface Session {
   id: string;
   createdAt: string;
@@ -50,6 +56,7 @@ export interface Session {
   timerStartedAt: string;
   timerPausedAt: string | null;
   timerPauses: TimePause[];
+  target?: SessionTarget | null;
 }
 
 export interface Preflop {
@@ -130,4 +137,6 @@ export interface Settings {
   currency: string;
   defaultTableSize: 6 | 8 | 9;
   pauseTimerDuringBreaks: boolean;
+  preflopFocusMode: boolean;
+  focusRFI: boolean;
 }

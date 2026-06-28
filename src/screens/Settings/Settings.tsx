@@ -69,6 +69,26 @@ export function Settings() {
       <div className={styles.rows}>
         <div className="row">
           <span className={styles.settingLabel}>
+            Preflop focus mode
+            <span className="label"> skip postflop screens</span>
+          </span>
+          <Toggle
+            on={settings.preflopFocusMode}
+            onToggle={() => updateSettings({ preflopFocusMode: !settings.preflopFocusMode })}
+          />
+        </div>
+        <div className="row">
+          <span className={styles.settingLabel}>
+            Focus on RFI only
+            <span className="label"> hide rec for other scenarios</span>
+          </span>
+          <Toggle
+            on={settings.focusRFI}
+            onToggle={() => updateSettings({ focusRFI: !settings.focusRFI })}
+          />
+        </div>
+        <div className="row">
+          <span className={styles.settingLabel}>
             Show chart after I fold
             <span className="label"> preflop only</span>
           </span>

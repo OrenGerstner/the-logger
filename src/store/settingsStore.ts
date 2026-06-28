@@ -12,6 +12,8 @@ export const DEFAULT_SETTINGS: Settings = {
   currency: '$',
   defaultTableSize: 9,
   pauseTimerDuringBreaks: true,
+  preflopFocusMode: true,
+  focusRFI: true,
 };
 
 function loadSettings(): Settings {

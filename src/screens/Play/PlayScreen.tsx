@@ -14,7 +14,7 @@ import { SessionHeader } from '@/components/SessionHeader/SessionHeader';
 import { PlayingCard } from '@/components/PlayingCard/PlayingCard';
 import { displayRecommendation } from '@/domain/deviationChecker';
 import { derivePositions, getHeroPosition, isShortHanded } from '@/domain/positions';
-import type { Position, HeroAction, OpponentAction } from '@/domain/types';
+import type { Position, HeroAction, OpponentAction, Session } from '@/domain/types';
 import styles from './PlayScreen.module.css';
 
 export function PlayScreen() {
@@ -88,7 +88,7 @@ export function PlayScreen() {
 
   function handleHeroAction(action: HeroAction) {
     setHeroAction(action);
-    if (action === 'Fold') navigate({ name: 'handResult' });
+    if (action === 'Fold' || settings.preflopFocusMode) navigate({ name: 'handResult' });
   }
 
   async function handleGoToFlop() {
@@ -134,7 +134,8 @@ export function PlayScreen() {
 
   const showRecBefore = settings.showRecommendation === 'before';
   const heroActed = !!draft.preflop.heroAction;
-  const showRec = rec && (showRecBefore || (heroActed && settings.showChartAfterFold));
+  const recAllowed = !settings.focusRFI || draft.preflop.scenario === 'RFI';
+  const showRec = rec && recAllowed && (showRecBefore || (heroActed && settings.showChartAfterFold));
 
   const facingDesc = draft.preflop.facingPosition
     ? `facing ${draft.preflop.facingPosition} ${draft.preflop.scenario === 'RFIvs3Bet' ? '3-bet' : 'raise'}`
@@ -151,6 +152,14 @@ export function PlayScreen() {
         onResume={resumeTimer}
         onUpdateStack={() => setStackModalOpen(true)}
       />
+
+      {activeSession.target && activeSession.startingStack && (
+        <TargetBar
+          session={activeSession}
+          currentStack={latestSnapshot?.stackAmount ?? activeSession.startingStack}
+          currency={settings.currency}
+        />
+      )}
 
       <div className="bar">
         <button className={styles.homeBtn} onClick={() => navigate({ name: 'home' })}>⌂</button>
@@ -227,7 +236,7 @@ export function PlayScreen() {
 
       <div className="btn-row">
         <button className="btn" onClick={handleLogNewHand}>Log new hand</button>
-        {draft.preflop.heroAction && draft.preflop.heroAction !== 'Fold' && (
+        {!settings.preflopFocusMode && draft.preflop.heroAction && draft.preflop.heroAction !== 'Fold' && (
           <button className="btn info" onClick={handleGoToFlop}>Go to flop →</button>
         )}
       </div>
@@ -258,6 +267,63 @@ export function PlayScreen() {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+    </div>
+  );
+}
+
+function TargetBar({
+  session,
+  currentStack,
+  currency,
+}: {
+  session: Session;
+  currentStack: number;
+  currency: string;
+}) {
+  const { target, startingStack } = session;
+  if (!target || !startingStack) return null;
+
+  const targetStack =
+    target.type === 'multiplier' && target.multiplier
+      ? startingStack * target.multiplier
+      : target.type === 'amount' && target.amount
+      ? target.amount
+      : null;
+
+  if (!targetStack) return null;
+
+  const profit = currentStack - startingStack;
+  const needed = targetStack - startingStack;
+  const pct = needed > 0 ? Math.min(100, Math.max(0, (profit / needed) * 100)) : 100;
+  const reached = currentStack >= targetStack;
+  const barColor = reached ? 'var(--go)' : pct > 0 ? 'var(--it)' : 'var(--dt)';
+  const remaining = targetStack - currentStack;
+
+  const label =
+    target.type === 'multiplier'
+      ? `${target.multiplier}x target`
+      : 'target';
+
+  return (
+    <div className={styles.targetBar}>
+      <div className={styles.targetInfo}>
+        <span className={styles.targetLabel}>
+          🎯 {label}: {currency}{targetStack.toFixed(0)}
+        </span>
+        <span className={styles.targetStatus} style={{ color: barColor }}>
+          {reached
+            ? '✓ Reached!'
+            : remaining > 0
+            ? `${currency}${remaining.toFixed(0)} to go`
+            : `${currency}${Math.abs(remaining).toFixed(0)} over`}
+        </span>
+      </div>
+      <div className={styles.targetTrack}>
+        <div
+          className={styles.targetFill}
+          style={{ width: `${pct}%`, background: barColor }}
+        />
+      </div>
     </div>
   );
 }

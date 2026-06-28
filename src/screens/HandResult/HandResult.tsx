@@ -79,9 +79,11 @@ export function HandResult() {
         heroSeat,
         heroPosition: nextPos,
       });
+      navigate({ name: 'play' });
+    } else {
+      // Table setup is inconsistent — go fix it
+      navigate({ name: 'tableSetup' });
     }
-
-    navigate({ name: 'play' });
   }
 
   const boardCards = [
