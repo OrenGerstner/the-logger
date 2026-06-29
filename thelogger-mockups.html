@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Logger — Screen Mockups</title>
+<link rel="stylesheet" href="https://unpkg.com/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#191916; --secondary:#232320; --tertiary:#2a2a27; --primary:#34332f;
+  --t1:#ECEAE3; --t2:#A8A69D; --t3:#76746C;
+  --bt:rgba(255,255,255,0.12); --bs:rgba(255,255,255,0.24);
+  --ib:rgba(55,138,221,0.18); --it:#85B7EB; --ibd:rgba(55,138,221,0.6);
+  --db:rgba(226,75,74,0.18); --dt:#F09595; --dbd:rgba(226,75,74,0.55);
+  --sb:rgba(29,158,117,0.18); --st:#5DCAA5; --sbd:rgba(29,158,117,0.55);
+  --wb:rgba(239,159,39,0.2); --wt:#FAC775; --wbd:rgba(239,159,39,0.55);
+}
+body.light{
+  --bg:#F4F2EB; --secondary:#ECEAE2; --tertiary:#F0EEE7; --primary:#FFFFFF;
+  --t1:#1d1c1a; --t2:#5F5E5A; --t3:#908E85;
+  --bt:rgba(0,0,0,0.12); --bs:rgba(0,0,0,0.24);
+  --ib:#E6F1FB; --it:#185FA5; --ibd:#378ADD;
+  --db:#FCEBEB; --dt:#A32D2D; --dbd:#E24B4A;
+  --sb:#E1F5EE; --st:#0F6E56; --sbd:#1D9E75;
+  --wb:#FAEEDA; --wt:#854F0B; --wbd:#EF9F27;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t1);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6}
+.page{max-width:1040px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+h1{font-size:24px;font-weight:500;margin:0}
+.sub{color:var(--t2);font-size:14px;margin:0 0 8px}
+h2{font-size:17px;font-weight:500;margin:34px 0 14px;padding-bottom:8px;border-bottom:0.5px solid var(--bt)}
+.tg{border:0.5px solid var(--bs);background:var(--primary);color:var(--t1);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer}
+.grid{display:flex;flex-wrap:wrap;gap:26px}
+.unit{width:300px}
+.phone{width:300px;background:var(--primary);border:0.5px solid var(--bs);border-radius:24px;padding:9px}
+.scr{background:var(--tertiary);border-radius:16px;padding:12px;min-height:470px;display:flex;flex-direction:column;gap:10px;position:relative}
+.bar{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500}
+.lbl{font-size:11px;color:var(--t2)}
+.b{border:0.5px solid var(--bs);border-radius:8px;background:var(--primary);padding:10px 0;text-align:center;font-size:13px;font-weight:500;flex:1}
+.b.info{border:1.5px solid var(--ibd);color:var(--it)}
+.b.go{border:1.5px solid var(--ibd);color:var(--it);background:var(--ib)}
+.b.danger{border:1.5px solid var(--dbd);color:var(--dt)}
+.b.success{border:1.5px solid var(--sbd);color:var(--st)}
+.fld{background:var(--primary);border:0.5px solid var(--bt);border-radius:8px;padding:11px 12px;font-size:13px;color:var(--t3)}
+.chip{border:0.5px solid var(--bs);border-radius:8px;background:var(--primary);padding:7px 12px;font-size:13px;font-weight:500}
+.chip.info{border:1.5px solid var(--ibd);color:var(--it)}
+.pcard{display:inline-flex;align-items:center;justify-content:center;gap:1px;width:34px;height:46px;border:0.5px solid var(--bs);border-radius:6px;background:var(--primary);font-weight:500;font-size:17px;color:var(--t1)}
+.pcard.sm{width:22px;height:30px;font-size:12px}
+.red{color:var(--dt)}
+.cc{display:flex;align-items:center;justify-content:center;gap:2px;height:27px;border:0.5px solid var(--bt);border-radius:6px;background:var(--primary);font-size:13px;font-weight:500;color:var(--t1)}
+.cc.sel{background:var(--ib);color:var(--it);border-color:var(--ibd)}
+.seat{position:absolute;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;line-height:1.05;text-align:center;border:0.5px solid var(--bs);background:var(--secondary);color:var(--t2)}
+.seat.you{background:var(--ib);color:var(--it);border:2px solid var(--ibd)}
+.seat.sel{border:2px solid var(--ibd)}
+.seat.raise{background:var(--db);color:var(--dt);border-color:var(--dbd)}
+.seat.del{background:var(--db);color:var(--dt);border:2px solid var(--dbd)}
+.seat.empty{border-style:dashed;color:var(--t3);background:transparent}
+.felt{position:absolute;left:18px;top:16px;right:18px;bottom:16px;border-radius:50%;border:0.5px solid var(--bs);background:var(--ib)}
+.tbl{position:relative;width:264px;height:200px;margin:4px auto 0}
+.dbtn{position:absolute;width:16px;height:16px;border-radius:50%;background:var(--wb);color:var(--wt);font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center;border:0.5px solid var(--wbd)}
+.rec{display:inline-block;background:var(--sb);color:var(--st);font-size:13px;font-weight:500;padding:4px 12px;border-radius:8px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--bt)}
+.metric{background:var(--secondary);border-radius:8px;padding:8px}
+.metric .v{font-size:17px;font-weight:500}
+.metric .k{font-size:10px;color:var(--t2)}
+.pop{position:absolute;background:var(--primary);border:0.5px solid var(--bs);border-radius:10px;width:148px;overflow:hidden;z-index:5}
+.opt{padding:9px 11px;font-size:13px;border-bottom:0.5px solid var(--bt);display:flex;align-items:center;gap:7px}
+.opt.info{color:var(--it)}
+.opt.last{border-bottom:none}
+.poptitle{padding:7px 11px;font-size:11px;color:var(--t2);background:var(--secondary)}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);border-radius:16px;display:flex;align-items:center;justify-content:center;padding:18px}
+.modal{background:var(--primary);border-radius:14px;border:0.5px solid var(--bs);padding:18px 16px;width:100%;text-align:center}
+.sw{width:38px;height:22px;border-radius:11px;position:relative;flex:none;background:var(--ib)}
+.sw .kn{position:absolute;top:2px;left:18px;width:18px;height:18px;border-radius:50%;background:var(--primary)}
+.cap{font-size:12px;color:var(--t2);margin-top:9px;text-align:center}
+.cap b{color:var(--t1);font-weight:500}
+.note{color:var(--t3);font-size:11px;text-align:center}
+i.ti{font-style:normal}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <div>
+    <h1>The Logger — screen mockups</h1>
+    <p class="sub">Preflop hand tracker · 9-handed cash · portrait · dark default</p>
+  </div>
+  <button class="tg" id="tg">Switch to light</button>
+</header>
+
+<h2>Session &amp; table setup</h2>
+<div class="grid">
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>New session</span><i class="ti ti-x"></i></div>
+    <div class="lbl">Game type</div>
+    <div style="display:flex;gap:8px"><div class="b info">Cash</div><div class="b">Tournament</div></div>
+    <div class="lbl">Venue</div>
+    <div class="fld"><i class="ti ti-map-pin"></i> Commerce Casino, LA</div>
+    <div class="lbl">Stakes</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <div class="chip info">$1 / $2</div><div class="chip">$1 / $3</div><div class="chip">$2 / $5</div><div class="chip">$5 / $10</div><div class="chip">Custom</div>
+    </div>
+    <div class="lbl">Table size</div>
+    <div style="display:flex;gap:8px"><div class="b">6-max</div><div class="b">8</div><div class="b info">9</div></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-top:2px"><span class="lbl">Buy-in (optional)</span><span style="font-size:13px;color:var(--t3)">$300</span></div>
+    <div style="margin-top:auto"><div class="b go"><i class="ti ti-player-play"></i> Start session</div></div>
+  </div></div>
+  <div class="cap"><b>New session</b> — type, venue, stakes, buy-in</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Table setup</span><i class="ti ti-check" style="color:var(--it)"></i></div>
+    <div class="lbl">Table size</div>
+    <div style="display:flex;gap:8px"><div class="b">6-max</div><div class="b">8</div><div class="b info">9-handed</div></div>
+    <div class="lbl">Tap seats — set who's in, and your seat</div>
+    <div class="tbl" style="margin-top:8px">
+      <div class="felt"></div>
+      <div class="seat" style="left:20px;top:45px">1</div>
+      <div class="seat empty" style="left:77px;top:12px">+</div>
+      <div class="seat" style="left:151px;top:12px">3</div>
+      <div class="seat" style="left:208px;top:45px">4</div>
+      <div class="seat empty" style="left:220px;top:95px">+</div>
+      <div class="seat" style="left:183px;top:139px">6</div>
+      <div class="seat you" style="left:114px;top:156px">You</div>
+      <div class="seat" style="left:45px;top:139px">8</div>
+      <div class="seat" style="left:8px;top:95px">9</div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--t2)"><span><i class="ti ti-point-filled" style="color:var(--it)"></i> you</span><span>● occupied</span><span style="color:var(--t3)">+ empty</span></div>
+    <div class="note" style="margin-top:auto">change your seat anytime if you get moved</div>
+  </div></div>
+  <div class="cap"><b>Table setup</b> — seats &amp; your position</div>
+  </div>
+
+</div>
+
+<h2>Logging a hand</h2>
+<div class="grid">
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Hand 24 · 9-handed</span><i class="ti ti-settings" style="color:var(--t2)"></i></div>
+    <div class="tbl">
+      <div class="felt" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--it);text-align:center">tap a seat<br>to mark a raise</div>
+      <div class="seat" style="left:20px;top:45px">UTG</div>
+      <div class="seat" style="left:77px;top:12px">U+1</div>
+      <div class="seat" style="left:151px;top:12px">U+2</div>
+      <div class="seat" style="left:208px;top:45px">LJ</div>
+      <div class="seat" style="left:220px;top:95px">HJ</div>
+      <div class="seat raise" style="left:183px;top:139px">CO<br>R</div>
+      <div class="seat you" style="left:114px;top:156px">You</div>
+      <div class="seat" style="left:45px;top:139px">SB</div>
+      <div class="seat" style="left:8px;top:95px">BB</div>
+      <div class="dbtn" style="left:148px;top:150px">D</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--t2)">Your position: <span style="color:var(--t1);font-weight:500">BTN</span> · facing CO raise</div>
+    <div style="display:flex;justify-content:center;gap:8px"><span class="pcard">A<span class="red">♥</span></span><span class="pcard">K<span>♠</span></span></div>
+    <div style="text-align:center"><span class="lbl">Recommended</span><div style="margin-top:3px"><span class="rec">3-Bet for Value</span></div></div>
+    <div style="display:flex;gap:8px;margin-top:auto"><div class="b">Fold</div><div class="b">Call</div><div class="b info">Raise</div></div>
+  </div></div>
+  <div class="cap"><b>Preflop</b> — table, position, recommendation</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span><i class="ti ti-arrow-left"></i> Your hand</span><span class="lbl">tap 2 cards</span></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;font-size:14px">
+      <div>♠</div><div class="red">♥</div><div class="red">♦</div><div>♣</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="cc">A♠</div><div class="cc sel">K♠</div><div class="cc">Q♠</div><div class="cc">J♠</div><div class="cc">T♠</div><div class="cc">9♠</div><div class="cc">8♠</div><div class="cc">7♠</div><div class="cc">6♠</div><div class="cc">5♠</div><div class="cc">4♠</div><div class="cc">3♠</div><div class="cc">2♠</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="cc sel">A♥</div><div class="cc red">K♥</div><div class="cc red">Q♥</div><div class="cc red">J♥</div><div class="cc red">T♥</div><div class="cc red">9♥</div><div class="cc red">8♥</div><div class="cc red">7♥</div><div class="cc red">6♥</div><div class="cc red">5♥</div><div class="cc red">4♥</div><div class="cc red">3♥</div><div class="cc red">2♥</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="cc red">A♦</div><div class="cc red">K♦</div><div class="cc red">Q♦</div><div class="cc red">J♦</div><div class="cc red">T♦</div><div class="cc red">9♦</div><div class="cc red">8♦</div><div class="cc red">7♦</div><div class="cc red">6♦</div><div class="cc red">5♦</div><div class="cc red">4♦</div><div class="cc red">3♦</div><div class="cc red">2♦</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="cc">A♣</div><div class="cc">K♣</div><div class="cc">Q♣</div><div class="cc">J♣</div><div class="cc">T♣</div><div class="cc">9♣</div><div class="cc">8♣</div><div class="cc">7♣</div><div class="cc">6♣</div><div class="cc">5♣</div><div class="cc">4♣</div><div class="cc">3♣</div><div class="cc">2♣</div>
+      </div>
+    </div>
+    <div class="note">used cards (board / your hand) are greyed out</div>
+    <div style="display:flex;gap:8px"><div class="b">Clear</div><div class="b info">Done</div></div>
+  </div></div>
+  <div class="cap"><b>Card picker</b> — roomy columns by suit</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Flop</span><span class="lbl">BTN · you 3-bet, CO called</span></div>
+    <div style="display:flex;gap:8px;align-items:center;background:var(--primary);border:0.5px solid var(--bt);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--t2)"><i class="ti ti-lock"></i> Your hand hidden · tap to peek</div>
+    <div class="lbl">Board</div>
+    <div style="display:flex;gap:7px;justify-content:center">
+      <span class="pcard">K<span class="red">♦</span></span><span class="pcard">7<span>♣</span></span><span class="pcard">2<span class="red">♥</span></span>
+      <span class="pcard" style="border-style:dashed;color:var(--t3)"><i class="ti ti-plus"></i></span>
+      <span class="pcard" style="border-style:dashed;color:var(--t3)"><i class="ti ti-plus"></i></span>
+    </div>
+    <div class="note">turn &amp; river added as you go · no chart postflop</div>
+    <div class="lbl">Your action</div>
+    <div style="display:flex;gap:8px"><div class="b">Fold</div><div class="b">Call</div><div class="b">Raise</div></div>
+    <div style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--t3);background:var(--primary);border:0.5px solid var(--bt);border-radius:8px;padding:9px 11px"><i class="ti ti-note"></i> Note to self…</div>
+    <div style="display:flex;gap:8px;margin-top:auto"><div class="b">Log new hand</div><div class="b info">Next: turn</div></div>
+  </div></div>
+  <div class="cap"><b>Flop / turn / river</b> — board only, cards hidden</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Hand result</span><span class="lbl">#24</span></div>
+    <div class="lbl">Your hand · revealed now hand is over</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="pcard">A<span class="red">♥</span></span><span class="pcard">K<span>♠</span></span>
+      <span style="font-size:11px;color:var(--t3);margin:0 4px">vs board</span>
+      <span class="pcard sm">K<span class="red">♦</span></span><span class="pcard sm">7<span>♣</span></span><span class="pcard sm">2<span class="red">♥</span></span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:flex-start;background:var(--db);border-radius:8px;padding:10px;color:var(--dt);font-size:12px"><i class="ti ti-alert-triangle"></i><span>Deviation — you <b style="font-weight:500">folded</b>. Chart said <b style="font-weight:500">3-Bet for Value</b>.</span></div>
+    <div class="lbl">Would have…</div>
+    <div style="display:flex;gap:8px"><div class="b success">Won</div><div class="b">Lost</div></div>
+    <div class="lbl">Amount</div>
+    <div class="fld">+ $0.00</div>
+    <div class="fld" style="font-size:12px">Note: tilted, should’ve 3-bet…</div>
+    <div style="margin-top:auto"><div class="b info">Save &amp; log new hand</div></div>
+  </div></div>
+  <div class="cap"><b>Result</b> — cards revealed, deviation &amp; would-have</div>
+  </div>
+
+</div>
+
+<h2>Seat interactions</h2>
+<div class="grid">
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span><i class="ti ti-edit" style="color:var(--it)"></i> Edit table</span><i class="ti ti-check" style="color:var(--it)"></i></div>
+    <div class="lbl">Tap a seat to set who's there — or mark it as you</div>
+    <div class="tbl" style="margin-top:8px">
+      <div class="felt"></div>
+      <div class="seat" style="left:20px;top:45px">1</div>
+      <div class="seat empty" style="left:77px;top:12px">+</div>
+      <div class="seat" style="left:151px;top:12px">3</div>
+      <div class="seat" style="left:208px;top:45px">4</div>
+      <div class="seat" style="left:220px;top:95px">5</div>
+      <div class="seat sel" style="left:183px;top:139px">6</div>
+      <div class="seat" style="left:114px;top:156px">You</div>
+      <div class="seat" style="left:45px;top:139px">8</div>
+      <div class="seat" style="left:8px;top:95px">9</div>
+      <div class="pop" style="left:64px;top:74px">
+        <div class="poptitle">Seat 6</div>
+        <div class="opt info"><i class="ti ti-user-check"></i> This is me</div>
+        <div class="opt"><i class="ti ti-user"></i> Player sitting</div>
+        <div class="opt last"><i class="ti ti-user-off"></i> Empty / left</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:auto">moved seats? just tap your new one</div>
+  </div></div>
+  <div class="cap"><b>Edit mode</b> — set your seat &amp; occupancy</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Hand 25 · in play</span><i class="ti ti-edit" style="color:var(--t3)"></i></div>
+    <div class="lbl">Tap the seat that acted — the app names the raise</div>
+    <div class="tbl" style="margin-top:8px">
+      <div class="felt"></div>
+      <div class="seat raise" style="left:20px;top:45px">UTG<br>R</div>
+      <div class="seat" style="left:77px;top:12px">U+1</div>
+      <div class="seat" style="left:151px;top:12px">U+2</div>
+      <div class="seat" style="left:208px;top:45px">LJ</div>
+      <div class="seat" style="left:220px;top:95px">HJ</div>
+      <div class="seat sel" style="left:183px;top:139px">CO</div>
+      <div class="seat" style="left:114px;top:156px">You</div>
+      <div class="seat" style="left:45px;top:139px">SB</div>
+      <div class="seat" style="left:8px;top:95px">BB</div>
+      <div class="pop" style="left:60px;top:72px">
+        <div class="poptitle">CO · UTG raised first</div>
+        <div class="opt info"><i class="ti ti-arrow-up"></i> 3-Bet</div>
+        <div class="opt"><i class="ti ti-equal"></i> Call</div>
+        <div class="opt last"><i class="ti ti-x"></i> Fold</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:auto">a raise over UTG's open = 3-Bet, set for you</div>
+  </div></div>
+  <div class="cap"><b>Play mode</b> — Raise → 3-Bet → 4-Bet auto-named</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Hand 25 · in play</span><i class="ti ti-edit" style="color:var(--t3)"></i></div>
+    <div class="lbl">Long-press a seat to remove that player</div>
+    <div class="tbl" style="margin-top:8px">
+      <div class="felt"></div>
+      <div class="seat" style="left:20px;top:45px">1</div>
+      <div class="seat" style="left:77px;top:12px">2</div>
+      <div class="seat" style="left:151px;top:12px">3</div>
+      <div class="seat" style="left:208px;top:45px">4</div>
+      <div class="seat" style="left:220px;top:95px">5</div>
+      <div class="seat del" style="left:183px;top:139px">6</div>
+      <div class="seat" style="left:114px;top:156px">You</div>
+      <div class="seat" style="left:45px;top:139px">8</div>
+      <div class="seat" style="left:8px;top:95px">9</div>
+    </div>
+    <div class="overlay">
+      <div class="modal">
+        <div style="font-size:15px;font-weight:500;margin-bottom:6px">Remove player?</div>
+        <div style="font-size:12px;color:var(--t2);margin-bottom:16px">Seat 6 will be marked empty and positions recalculated.</div>
+        <div style="display:flex;gap:8px"><div class="b">Cancel</div><div class="b danger">Remove</div></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><b>Long-press</b> — remove-player confirm</div>
+  </div>
+
+</div>
+
+<h2>Review &amp; settings</h2>
+<div class="grid">
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Hands</span><span class="lbl">session · today</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div class="metric"><div class="k">hands</div><div class="v">32</div></div>
+      <div class="metric"><div class="k">off-chart</div><div class="v" style="color:var(--dt)">5</div></div>
+      <div class="metric"><div class="k">net</div><div class="v" style="color:var(--st)">+210</div></div>
+    </div>
+    <div style="flex:1;overflow:hidden">
+      <div class="row"><div style="display:flex;align-items:center;gap:6px"><span class="lbl" style="width:26px">#24</span><span class="pcard sm">A<span class="red">♥</span></span><span class="pcard sm">K♠</span><span class="lbl">BTN · fold</span></div><span style="color:var(--dt)"><i class="ti ti-alert-triangle"></i></span></div>
+      <div class="row"><div style="display:flex;align-items:center;gap:6px"><span class="lbl" style="width:26px">#23</span><span class="pcard sm">9♠</span><span class="pcard sm">9<span class="red">♦</span></span><span class="lbl">CO · raise</span></div><span style="font-size:12px;color:var(--st)">+140</span></div>
+      <div class="row"><div style="display:flex;align-items:center;gap:6px"><span class="lbl" style="width:26px">#22</span><span class="pcard sm">A♣</span><span class="pcard sm">7♣</span><span class="lbl">SB · fold</span></div><span class="lbl">—</span></div>
+      <div class="row"><div style="display:flex;align-items:center;gap:6px"><span class="lbl" style="width:26px">#21</span><span class="pcard sm">K<span class="red">♦</span></span><span class="pcard sm">Q<span class="red">♦</span></span><span class="lbl">HJ · call</span></div><span style="font-size:12px;color:var(--dt)">−60</span></div>
+      <div class="row"><div style="display:flex;align-items:center;gap:6px"><span class="lbl" style="width:26px">#20</span><span class="pcard sm">J♠</span><span class="pcard sm">T♠</span><span class="lbl">LJ · raise</span></div><span style="font-size:12px;color:var(--st)">+85</span></div>
+    </div>
+    <div style="display:flex;gap:8px"><div class="b">Clear</div><div class="b info"><i class="ti ti-download"></i> Export CSV</div></div>
+  </div></div>
+  <div class="cap"><b>Hand history</b> — session summary &amp; CSV export</div>
+  </div>
+
+  <div class="unit">
+  <div class="phone"><div class="scr">
+    <div class="bar"><span>Settings</span><i class="ti ti-settings" style="color:var(--t2)"></i></div>
+    <div class="lbl">Theme</div>
+    <div style="display:flex;gap:8px"><div class="b info">Dark</div><div class="b">Light</div></div>
+    <div class="lbl">Show recommendation</div>
+    <div style="display:flex;gap:8px"><div class="b info">Before I act</div><div class="b">After I act</div></div>
+    <div class="row"><span style="font-size:13px">Show chart after I fold<br><span class="lbl">preflop only</span></span><div class="sw"><div class="kn"></div></div></div>
+    <div class="row"><span style="font-size:13px">Hide hole cards postflop</span><div class="sw"><div class="kn"></div></div></div>
+    <div class="row"><span style="font-size:13px">Flag chart deviations</span><div class="sw"><div class="kn"></div></div></div>
+    <div class="row"><span style="font-size:13px">Currency</span><span class="lbl">$ USD</span></div>
+    <div class="row"><span style="font-size:13px">Default table size</span><span class="lbl">9-handed</span></div>
+    <div style="margin-top:auto"><div class="b"><i class="ti ti-download"></i> Export all data</div></div>
+  </div></div>
+  <div class="cap"><b>Settings</b> — incl. dark mode (default) &amp; toggles</div>
+  </div>
+
+</div>
+
+</div>
+<script>
+  var t=document.getElementById('tg');
+  t.addEventListener('click',function(){
+    document.body.classList.toggle('light');
+    t.textContent=document.body.classList.contains('light')?'Switch to dark':'Switch to light';
+  });
+</script>
+</body>
+</html>

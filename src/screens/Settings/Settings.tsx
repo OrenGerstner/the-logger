@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useNavigation } from '@/navigation/NavigationContext';
 import { useSettings } from '@/store/settingsStore';
+import { getAnthropicKey, setAnthropicKey } from '@/store/anthropicKeyStore';
 import { handRepo } from '@/db/handRepo';
 import { sessionRepo } from '@/db/sessionRepo';
 import { stackSnapshotRepo } from '@/db/stackSnapshotRepo';
@@ -9,6 +11,14 @@ import styles from './Settings.module.css';
 export function Settings() {
   const { goBack } = useNavigation();
   const { settings, updateSettings } = useSettings();
+  const [apiKeyInput, setApiKeyInput] = useState(getAnthropicKey);
+  const [apiKeySaved, setApiKeySaved] = useState(false);
+
+  function handleSaveApiKey() {
+    setAnthropicKey(apiKeyInput);
+    setApiKeySaved(true);
+    setTimeout(() => setApiKeySaved(false), 2000);
+  }
 
   async function handleExportAll() {
     const sessions = await sessionRepo.getAll();
@@ -123,6 +133,31 @@ export function Settings() {
 
       <div className="note" style={{ marginTop: 4, fontSize: 10 }}>
         Clearing site data in your browser deletes all session data.
+      </div>
+
+      <div className="label" style={{ marginTop: 12 }}>AI vision — tournament structure</div>
+      <div className="note" style={{ marginBottom: 6 }}>
+        Your key is stored on this device only. Used for photo import of tournament schedules.
+        Get a key at console.anthropic.com.
+      </div>
+      <div className={styles.apiKeyRow}>
+        <input
+          className="field"
+          type="password"
+          placeholder="sk-ant-…"
+          value={apiKeyInput}
+          onChange={(e) => setApiKeyInput(e.target.value)}
+          autoComplete="off"
+          style={{ flex: 1 }}
+        />
+        <button className="btn" onClick={handleSaveApiKey} style={{ flexShrink: 0 }}>
+          {apiKeySaved ? '✓ Saved' : 'Save'}
+        </button>
+        {getAnthropicKey() && (
+          <button className="btn danger" onClick={() => { setAnthropicKey(''); setApiKeyInput(''); }} style={{ flexShrink: 0 }}>
+            Remove
+          </button>
+        )}
       </div>
 
       <div style={{ marginTop: 'auto' }}>

@@ -21,3 +21,10 @@
   flex-direction: column;
   gap: 1px;
 }
+
+.apiKeyRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}

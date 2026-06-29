@@ -7,51 +7,6 @@
   padding: 0;
 }
 
-.textarea {
-  width: 100%;
-  background: var(--secondary);
-  border: 0.5px solid var(--bs);
-  border-radius: 8px;
-  color: var(--t1);
-  font-size: 11px;
-  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-  padding: 10px;
-  resize: vertical;
-  box-sizing: border-box;
-  margin-bottom: 8px;
-}
-
-.error {
-  font-size: 12px;
-  color: var(--dt);
-  margin-bottom: 6px;
-}
-
-.parsedCard {
-  border: 0.5px solid var(--bs);
-  border-radius: 10px;
-  background: var(--secondary);
-  padding: 12px 14px;
-  margin-top: 10px;
-}
-
-.parsedName {
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.saveName {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.saveName .field {
-  flex: 1;
-}
-
 .templateList {
   display: flex;
   flex-direction: column;
@@ -89,4 +44,132 @@
   padding: 10px 14px;
   cursor: pointer;
   font-size: 14px;
+}
+
+/* Import row */
+.importRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.importRow .btn {
+  flex: 1;
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: var(--it);
+  font-size: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Status messages */
+.statusInfo {
+  font-size: 12px;
+  color: var(--t2);
+  background: var(--secondary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.statusOk {
+  font-size: 12px;
+  color: var(--gt);
+  background: var(--secondary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.statusErr {
+  font-size: 12px;
+  color: var(--dt);
+  background: var(--secondary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.spinner {
+  margin-right: 4px;
+}
+
+/* Level table */
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 8px;
+  border: 0.5px solid var(--bs);
+  border-radius: 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.th {
+  padding: 8px 4px;
+  text-align: center;
+  color: var(--t2);
+  font-weight: 500;
+  font-size: 11px;
+  border-bottom: 0.5px solid var(--bs);
+  background: var(--secondary);
+}
+
+.th:first-child { border-radius: 10px 0 0 0; }
+.th:last-child  { border-radius: 0 10px 0 0; }
+
+.td {
+  padding: 2px;
+  text-align: center;
+  border-bottom: 0.5px solid var(--bs);
+}
+
+tr:last-child .td { border-bottom: none; }
+
+.cell {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--t1);
+  font-size: 13px;
+  font-family: inherit;
+  text-align: center;
+  padding: 6px 2px;
+  min-width: 44px;
+}
+
+.cell:focus {
+  outline: none;
+  background: var(--secondary);
+  border-radius: 4px;
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: var(--dt);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+.addRow {
+  background: none;
+  border: 0.5px dashed var(--bs);
+  border-radius: 8px;
+  color: var(--it);
+  font-size: 13px;
+  cursor: pointer;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
 }
