@@ -20,6 +20,7 @@ export function Home() {
   const { tableState } = useTableState();
   const { startNewHand, draft } = useHand();
   const [endDialogOpen, setEndDialogOpen] = useState(false);
+  const [versionModalOpen, setVersionModalOpen] = useState(false);
   const [cashOutStr, setCashOutStr] = useState('');
   const [finishPlaceStr, setFinishPlaceStr] = useState('');
   const [prizeWonStr, setPrizeWonStr] = useState('');
@@ -105,7 +106,7 @@ export function Home() {
   return (
     <div className="screen">
       <div className={styles.logoRow}>
-        <span className={styles.logo}>The Logger</span>
+        <button className={styles.logo} onClick={() => setVersionModalOpen(true)}>The Logger</button>
         <button className={styles.settingsBtn} onClick={() => navigate({ name: 'settings' })}>⚙</button>
       </div>
 
@@ -150,6 +151,20 @@ export function Home() {
             </button>
           </div>
         </>
+      )}
+
+      {versionModalOpen && (
+        <div className={styles.overlay} onClick={() => setVersionModalOpen(false)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.modalTitle}>The Logger</p>
+            <p className={styles.versionNumber}>{__APP_VERSION__}</p>
+            <p className={styles.copyright}>
+              Designed by Oren Gerstner, developed by Claude.{'\n'}
+              All rights reserved to Oren Gerstner.
+            </p>
+            <button className="btn" style={{ marginTop: 14 }} onClick={() => setVersionModalOpen(false)}>Close</button>
+          </div>
+        </div>
       )}
 
       <Dialog.Root open={endDialogOpen} onOpenChange={setEndDialogOpen}>

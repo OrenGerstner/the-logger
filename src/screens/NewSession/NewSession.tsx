@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigation } from '@/navigation/NavigationContext';
 import { useSession } from '@/store/SessionContext';
 import { useSettings } from '@/store/settingsStore';
@@ -43,6 +43,12 @@ export function NewSession() {
   const [tournamentTableSize, setTournamentTableSize] = useState<6 | 8 | 9>(9);
   const [structure, setStructure] = useState<TournamentStructure | null>(() => takePendingStructure());
 
+  // Pick up any structure set by StructureEditor after it calls goBack() and NewSession remounts
+  useEffect(() => {
+    const pending = takePendingStructure();
+    if (pending) setStructure(pending);
+  }, []);
+
   const buyInAmount = parseFloat(buyIn) || null;
   const tournamentBuyInAmount = parseFloat(tournamentBuyIn) || null;
   const startingChipsAmount = parseFloat(startingChips) || null;
@@ -56,10 +62,6 @@ export function NewSession() {
     }
     return { type: 'multiplier', multiplier: targetMode };
   }
-
-  // Pick up structure returned by StructureEditor on remount
-  const pendingStructure = takePendingStructure();
-  if (pendingStructure && !structure) setStructure(pendingStructure);
 
   async function handleStartCash() {
     const finalStakes = customStakes

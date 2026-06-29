@@ -25,6 +25,7 @@ npm-debug.log*
 
 # Local dev
 .cache/
+.build-counter.json
 
 # Chart extraction artifacts (large binary / generated files)
 preflop-charts.pdf

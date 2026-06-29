@@ -367,6 +367,8 @@ function TournamentInfoRow({
         <span className={styles.levelLabel}>
           L{currentLevel}
           {levelRow && <span className={styles.blindsLabel}> · {formatBlinds(levelRow)}</span>}
+          {effBB !== null && <span className={styles.blindsLabel}> · {effBB.toFixed(1)} BB</span>}
+          <span className={styles.blindsLabel}> · {regime === 'pushfold' ? 'Push/fold' : 'Charts'}</span>
         </span>
         <button className={styles.levelBtn} onClick={() => onLevelChange(1)} disabled={maxLevel > 0 && currentLevel >= maxLevel}>+</button>
       </div>
