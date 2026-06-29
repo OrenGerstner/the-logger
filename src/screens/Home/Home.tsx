@@ -15,12 +15,14 @@ import styles from './Home.module.css';
 
 export function Home() {
   const { navigate } = useNavigation();
-  const { activeSession, isLoading, endSession } = useSession();
+  const { activeSession, isLoading, endSession, endTournamentSession } = useSession();
   const { settings } = useSettings();
   const { tableState } = useTableState();
   const { startNewHand, draft } = useHand();
   const [endDialogOpen, setEndDialogOpen] = useState(false);
   const [cashOutStr, setCashOutStr] = useState('');
+  const [finishPlaceStr, setFinishPlaceStr] = useState('');
+  const [prizeWonStr, setPrizeWonStr] = useState('');
 
   const hands = useLiveQuery(
     () => activeSession ? handRepo.getBySession(activeSession.id) : Promise.resolve([]),
@@ -33,6 +35,7 @@ export function Home() {
   ) ?? [];
 
   const latestSnapshot = snapshots[snapshots.length - 1];
+  const isTournament = activeSession?.gameType === 'tournament';
 
   if (isLoading) {
     return <div className="screen"><div className="note" style={{ marginTop: 40 }}>Loading…</div></div>;
@@ -65,11 +68,21 @@ export function Home() {
     }
   }
 
-  async function handleEndSession() {
+  async function handleEndCashSession() {
     const cashOut = parseFloat(cashOutStr) || 0;
     await endSession(cashOut);
     setEndDialogOpen(false);
     setCashOutStr('');
+  }
+
+  async function handleEndTournamentSession() {
+    const finishPlace = parseInt(finishPlaceStr) || null;
+    const prizeWon = parseFloat(prizeWonStr) || null;
+    const itm = prizeWon !== null && prizeWon > 0;
+    await endTournamentSession(finishPlace, prizeWon, itm);
+    setEndDialogOpen(false);
+    setFinishPlaceStr('');
+    setPrizeWonStr('');
   }
 
   const elapsed = activeSession
@@ -80,6 +93,14 @@ export function Home() {
         activeSession.endedAt
       )
     : 0;
+
+  const sessionLabel = isTournament
+    ? activeSession?.venue || activeSession?.structure?.name || 'Tournament'
+    : `${settings.currency}${activeSession?.stakes.smallBlind}/${settings.currency}${activeSession?.stakes.bigBlind}`;
+
+  const stackLabel = isTournament
+    ? (latestSnapshot ? `${latestSnapshot.stackAmount.toLocaleString()} chips` : null)
+    : (latestSnapshot ? formatStack(latestSnapshot.stackAmount, settings.currency) : null);
 
   return (
     <div className="screen">
@@ -92,12 +113,15 @@ export function Home() {
         <>
           <div className={styles.sessionCard}>
             <div className={styles.sessionStakes}>
-              {settings.currency}{activeSession.stakes.smallBlind}/{settings.currency}{activeSession.stakes.bigBlind}
-              {activeSession.venue && <span className={styles.venue}> · {activeSession.venue}</span>}
+              {sessionLabel}
+              {activeSession.venue && !isTournament && <span className={styles.venue}> · {activeSession.venue}</span>}
+              {isTournament && activeSession.currentLevel && (
+                <span className={styles.venue}> · L{activeSession.currentLevel}</span>
+              )}
             </div>
             <div className={styles.sessionMeta}>
               {hands.length} hands · {formatElapsedTime(elapsed)}
-              {latestSnapshot && <> · stack: {formatStack(latestSnapshot.stackAmount, settings.currency)}</>}
+              {stackLabel && <> · {stackLabel}</>}
             </div>
           </div>
 
@@ -132,25 +156,59 @@ export function Home() {
         <Dialog.Portal>
           <Dialog.Overlay className={styles.overlay} />
           <Dialog.Content className={styles.modal}>
-            <Dialog.Title className={styles.modalTitle}>End session</Dialog.Title>
-            <Dialog.Description style={{ fontSize: 12, color: 'var(--t2)', marginBottom: 14, textAlign: 'center' }}>
-              Enter your cash-out amount to finalize session stats.
-            </Dialog.Description>
-            <input
-              className="field"
-              placeholder={`${settings.currency}0`}
-              value={cashOutStr}
-              onChange={(e) => setCashOutStr(e.target.value)}
-              type="number"
-              inputMode="decimal"
-              autoFocus
-            />
-            <div className="btn-row" style={{ marginTop: 12 }}>
-              <Dialog.Close asChild>
-                <button className="btn">Cancel</button>
-              </Dialog.Close>
-              <button className="btn danger" onClick={handleEndSession}>End session</button>
-            </div>
+            {isTournament ? (
+              <>
+                <Dialog.Title className={styles.modalTitle}>End tournament</Dialog.Title>
+                <Dialog.Description style={{ fontSize: 12, color: 'var(--t2)', marginBottom: 14, textAlign: 'center' }}>
+                  Enter your finishing position to save results.
+                </Dialog.Description>
+                <input
+                  className="field"
+                  placeholder="Finish place (e.g. 42)"
+                  value={finishPlaceStr}
+                  onChange={(e) => setFinishPlaceStr(e.target.value)}
+                  type="number"
+                  inputMode="numeric"
+                  autoFocus
+                />
+                <input
+                  className="field"
+                  placeholder={`Prize won (${settings.currency}0 if busted)`}
+                  value={prizeWonStr}
+                  onChange={(e) => setPrizeWonStr(e.target.value)}
+                  type="number"
+                  inputMode="decimal"
+                />
+                <div className="btn-row" style={{ marginTop: 12 }}>
+                  <Dialog.Close asChild>
+                    <button className="btn">Cancel</button>
+                  </Dialog.Close>
+                  <button className="btn danger" onClick={handleEndTournamentSession}>End tournament</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Dialog.Title className={styles.modalTitle}>End session</Dialog.Title>
+                <Dialog.Description style={{ fontSize: 12, color: 'var(--t2)', marginBottom: 14, textAlign: 'center' }}>
+                  Enter your cash-out amount to finalize session stats.
+                </Dialog.Description>
+                <input
+                  className="field"
+                  placeholder={`${settings.currency}0`}
+                  value={cashOutStr}
+                  onChange={(e) => setCashOutStr(e.target.value)}
+                  type="number"
+                  inputMode="decimal"
+                  autoFocus
+                />
+                <div className="btn-row" style={{ marginTop: 12 }}>
+                  <Dialog.Close asChild>
+                    <button className="btn">Cancel</button>
+                  </Dialog.Close>
+                  <button className="btn danger" onClick={handleEndCashSession}>End session</button>
+                </div>
+              </>
+            )}
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>

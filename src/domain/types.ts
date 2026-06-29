@@ -40,6 +40,43 @@ export interface SessionTarget {
   amount?: number;
 }
 
+// --- Tournament types ---
+
+export type IcmPressure = 'chipEV' | 'nearBubble' | 'finalTable';
+
+export interface TournamentLevelRow {
+  kind: 'level';
+  level: number;
+  sb: number;
+  bb: number;
+  ante: number;
+  minutes?: number;
+}
+
+export interface TournamentBreakRow {
+  kind: 'break' | 'chiprace' | 'chipremoval';
+  label?: string;
+  minutes?: number;
+}
+
+export type TournamentStructureRow = TournamentLevelRow | TournamentBreakRow;
+
+export interface TournamentStructure {
+  name: string;
+  venue?: string;
+  gameType?: string;
+  buyIn?: number;
+  startingChips?: number;
+  anteType?: 'big_blind' | 'traditional' | 'none';
+  rows: TournamentStructureRow[];
+}
+
+export interface AddOn {
+  amount: number;
+  chips: number;
+  at: string;
+}
+
 export interface Session {
   id: string;
   createdAt: string;
@@ -57,6 +94,16 @@ export interface Session {
   timerPausedAt: string | null;
   timerPauses: TimePause[];
   target?: SessionTarget | null;
+  // Tournament fields (undefined for cash sessions)
+  structure?: TournamentStructure | null;
+  currentLevel?: number;
+  addOns?: AddOn[];
+  payouts?: Array<{ place: number; amount: number }> | null;
+  fieldSize?: number | null;
+  icmPressure?: IcmPressure;
+  finishPlace?: number | null;
+  prizeWon?: number | null;
+  itm?: boolean;
 }
 
 export interface Preflop {
@@ -104,6 +151,12 @@ export interface Hand {
   stackAfter: number | null;
   stackAttributionConfidence: 'exact' | 'likely' | 'ambiguous' | null;
   note: string;
+  // Tournament fields (null for cash hands)
+  level?: number | null;
+  effBB?: number | null;
+  regime?: 'cash' | 'pushfold' | 'offchart' | null;
+  pushFoldRec?: 'Shove' | 'Call' | 'Fold' | null;
+  icmPressureAtHand?: IcmPressure | null;
 }
 
 export interface StackSnapshot {

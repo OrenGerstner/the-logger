@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { v4 as uuid } from 'uuid';
-import type { Session } from '@/domain/types';
+import type { Session, IcmPressure } from '@/domain/types';
 import { sessionRepo } from '@/db/sessionRepo';
 import { stackSnapshotRepo } from '@/db/stackSnapshotRepo';
 
@@ -12,10 +12,13 @@ interface SessionCtx {
   isLoading: boolean;
   createSession(params: SessionCreateParams): Promise<string>;
   endSession(cashOut: number): Promise<void>;
+  endTournamentSession(finishPlace: number | null, prizeWon: number | null, itm: boolean): Promise<void>;
   deleteSession(sessionId: string): Promise<void>;
   pauseTimer(): Promise<void>;
   resumeTimer(): Promise<void>;
   createQuickStackSnapshot(stack: number, handNumberContext: number): Promise<void>;
+  setCurrentLevel(level: number): Promise<void>;
+  setIcmPressure(pressure: IcmPressure): Promise<void>;
 }
 
 const SessionContext = createContext<SessionCtx | null>(null);
@@ -80,8 +83,42 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  async function endTournamentSession(
+    finishPlace: number | null,
+    prizeWon: number | null,
+    itm: boolean
+  ): Promise<void> {
+    if (!activeSession) return;
+    const prize = prizeWon ?? 0;
+    await sessionRepo.endTournament(activeSession.id, finishPlace, prizeWon, itm);
+    await stackSnapshotRepo.create({
+      id: uuid(),
+      sessionId: activeSession.id,
+      createdAt: new Date().toISOString(),
+      handNumberContext: 0,
+      stackAmount: prize,
+      previousStackAmount: null,
+      deltaFromPrevious: null,
+      source: 'session_end',
+      candidateHandIds: [],
+      assignedHandId: null,
+      attributionConfidence: null,
+      note: '',
+    });
+  }
+
   async function deleteSession(sessionId: string): Promise<void> {
     await sessionRepo.delete(sessionId);
+  }
+
+  async function setCurrentLevel(level: number): Promise<void> {
+    if (!activeSession) return;
+    await sessionRepo.setCurrentLevel(activeSession.id, level);
+  }
+
+  async function setIcmPressure(pressure: import('@/domain/types').IcmPressure): Promise<void> {
+    if (!activeSession) return;
+    await sessionRepo.setIcmPressure(activeSession.id, pressure);
   }
 
   async function pauseTimer(): Promise<void> {
@@ -122,10 +159,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       isLoading,
       createSession,
       endSession,
+      endTournamentSession,
       deleteSession,
       pauseTimer,
       resumeTimer,
       createQuickStackSnapshot,
+      setCurrentLevel,
+      setIcmPressure,
     }}>
       {children}
     </SessionContext.Provider>

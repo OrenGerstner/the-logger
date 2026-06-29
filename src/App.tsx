@@ -10,6 +10,7 @@ import { HandHistory } from '@/screens/HandHistory/HandHistory';
 import { PastSessions } from '@/screens/PastSessions/PastSessions';
 import { SessionDetail } from '@/screens/SessionDetail/SessionDetail';
 import { Settings } from '@/screens/Settings/Settings';
+import { StructureEditor } from '@/screens/StructureEditor/StructureEditor';
 
 export function App() {
   const { currentScreen } = useNavigation();
@@ -30,6 +31,7 @@ export function App() {
       {name === 'pastSessions' && <PastSessions />}
       {name === 'sessionDetail' && <SessionDetail />}
       {name === 'settings' && <Settings />}
+      {name === 'structureEditor' && <StructureEditor />}
     </div>
   );
 }

@@ -20,7 +20,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@charts": ["./charts.json"]
+      "@charts": ["./charts.json"],
+      "@pushfold": ["./pushfold.json"]
     }
   },
   "include": ["src"]

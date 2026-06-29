@@ -37,6 +37,31 @@ export const sessionRepo = {
     });
   },
 
+  async endTournament(
+    id: string,
+    finishPlace: number | null,
+    prizeWon: number | null,
+    itm: boolean
+  ): Promise<void> {
+    await db.sessions.update(id, {
+      status: 'ended',
+      cashOut: prizeWon ?? 0,
+      finishPlace,
+      prizeWon,
+      itm,
+      endedAt: new Date().toISOString(),
+      timerPausedAt: null,
+    });
+  },
+
+  async setCurrentLevel(id: string, level: number): Promise<void> {
+    await db.sessions.update(id, { currentLevel: level });
+  },
+
+  async setIcmPressure(id: string, pressure: import('@/domain/types').IcmPressure): Promise<void> {
+    await db.sessions.update(id, { icmPressure: pressure });
+  },
+
   async pauseTimer(id: string): Promise<void> {
     await db.sessions.update(id, { timerPausedAt: new Date().toISOString() });
   },

@@ -87,6 +87,7 @@ function SessionStats({
 
   const pct = (n: number) => (total > 0 ? `${Math.round((n / total) * 100)}%` : '—');
 
+  const isTournament = session.gameType === 'tournament';
   const totalInvested = session.buyIns.reduce((s, b) => s + b.amount, 0);
   const profit = session.cashOut != null ? session.cashOut - totalInvested : null;
   const elapsedHours = elapsed / 3600;
@@ -112,7 +113,9 @@ function SessionStats({
       <div className={styles.header}>
         <span className={styles.headerDate}>{date}</span>
         <span className={styles.headerMeta}>
-          {currency}{session.stakes.smallBlind}/{currency}{session.stakes.bigBlind}
+          {isTournament
+            ? (session.structure?.name ?? 'Tournament')
+            : `${currency}${session.stakes.smallBlind}/${currency}${session.stakes.bigBlind}`}
           {session.venue ? ` · ${session.venue}` : ''}
         </span>
       </div>
@@ -145,22 +148,49 @@ function SessionStats({
       <div className={styles.sectionTitle}>Results</div>
       <div className={styles.section}>
         <div className={styles.row2}>
-          <span className={styles.label}>Total P/L</span>
+          <span className={styles.label}>{isTournament ? 'Net' : 'Total P/L'}</span>
           <span className={styles.value} style={{ color: profitColor }}>{profitLabel}</span>
         </div>
+        {!isTournament && (
+          <div className={styles.row2}>
+            <span className={styles.label}>Earn rate</span>
+            <span className={styles.value} style={{ color: profitColor }}>{dphLabel}</span>
+          </div>
+        )}
         <div className={styles.row2}>
-          <span className={styles.label}>Earn rate</span>
-          <span className={styles.value} style={{ color: profitColor }}>{dphLabel}</span>
-        </div>
-        <div className={styles.row2}>
-          <span className={styles.label}>Buy-in</span>
+          <span className={styles.label}>Buy-in{isTournament && session.buyIns.length > 1 ? ` (×${session.buyIns.length})` : ''}</span>
           <span className={styles.value}>{currency}{totalInvested.toFixed(0)}</span>
         </div>
-        {session.cashOut != null && (
-          <div className={styles.row2}>
-            <span className={styles.label}>Cash out</span>
-            <span className={styles.value}>{currency}{session.cashOut.toFixed(0)}</span>
-          </div>
+        {isTournament ? (
+          <>
+            {session.finishPlace != null && (
+              <div className={styles.row2}>
+                <span className={styles.label}>Finish place</span>
+                <span className={styles.value}>#{session.finishPlace}</span>
+              </div>
+            )}
+            {session.prizeWon != null && (
+              <div className={styles.row2}>
+                <span className={styles.label}>Prize won</span>
+                <span className={styles.value} style={{ color: (session.prizeWon ?? 0) > 0 ? 'var(--go)' : undefined }}>
+                  {currency}{(session.prizeWon ?? 0).toFixed(0)}
+                </span>
+              </div>
+            )}
+            <div className={styles.row2}>
+              <span className={styles.label}>ITM</span>
+              <span className={styles.value} style={{ color: session.itm ? 'var(--go)' : 'var(--dt)' }}>
+                {session.itm ? 'Yes' : 'No'}
+              </span>
+            </div>
+          </>
+        ) : (
+          session.cashOut != null && (
+            <div className={styles.row2}>
+              <span className={styles.label}>Cash out</span>
+              <span className={styles.value}>{currency}{session.cashOut.toFixed(0)}</span>
+            </div>
+          )
         )}
       </div>
 

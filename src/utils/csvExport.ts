@@ -45,6 +45,9 @@ const HAND_HEADERS = [
   'hero_flop_action', 'hero_turn_action', 'hero_river_action',
   'result', 'would_have', 'amount', 'amount_source',
   'stack_attribution_confidence', 'note', 'opponent_actions',
+  // Tournament columns (blank for cash sessions)
+  'tournament_level', 'effective_bb', 'regime', 'push_fold_rec', 'icm_pressure',
+  'session_finish_place', 'session_prize_won', 'session_itm', 'session_field_size',
 ];
 
 const SNAPSHOT_HEADERS = [
@@ -117,6 +120,16 @@ export function exportHandsCSV(sessions: Session[], hands: Hand[]): string {
         hand.stackAttributionConfidence ?? '',
         hand.note,
         formatOpponentActions(hand.preflop.opponentActions),
+        // Tournament columns
+        hand.level ?? '',
+        hand.effBB ?? '',
+        hand.regime ?? '',
+        hand.pushFoldRec ?? '',
+        hand.icmPressureAtHand ?? '',
+        session.finishPlace ?? '',
+        session.prizeWon ?? '',
+        session.itm ?? '',
+        session.fieldSize ?? '',
       ]));
     }
   }

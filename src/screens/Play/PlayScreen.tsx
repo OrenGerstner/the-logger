@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useNavigation } from '@/navigation/NavigationContext';
 import { useHand } from '@/store/HandContext';
@@ -14,13 +14,20 @@ import { SessionHeader } from '@/components/SessionHeader/SessionHeader';
 import { PlayingCard } from '@/components/PlayingCard/PlayingCard';
 import { displayRecommendation } from '@/domain/deviationChecker';
 import { derivePositions, getHeroPosition, isShortHanded } from '@/domain/positions';
-import type { Position, HeroAction, OpponentAction, Session } from '@/domain/types';
+import { getLevelRow, computeEffBB, getStrategyRegime, formatBlinds, getMaxLevel } from '@/domain/tournamentStructure';
+import type { Position, HeroAction, OpponentAction, Session, IcmPressure } from '@/domain/types';
 import styles from './PlayScreen.module.css';
+
+const ICM_LABELS: Record<IcmPressure, string> = {
+  chipEV: 'Chip-EV',
+  nearBubble: 'Bubble',
+  finalTable: 'FT',
+};
 
 export function PlayScreen() {
   const { navigate } = useNavigation();
-  const { draft, setHeroAction, addOpponentAction, removeOpponentAction, startNewHand, toHand } = useHand();
-  const { activeSession, pauseTimer, resumeTimer, createQuickStackSnapshot } = useSession();
+  const { draft, setHeroAction, addOpponentAction, removeOpponentAction, startNewHand, toHand, setTournamentContext } = useHand();
+  const { activeSession, pauseTimer, resumeTimer, createQuickStackSnapshot, setCurrentLevel, setIcmPressure } = useSession();
   const { settings, updateSettings } = useSettings();
   const { tableState, setHeroSeat, setSeatOccupied, setButtonSeat } = useTableState();
 
@@ -40,6 +47,28 @@ export function PlayScreen() {
 
   const latestSnapshot = snapshots[snapshots.length - 1];
 
+  const isTournament = activeSession?.gameType === 'tournament';
+
+  // Compute and sync tournament context into the draft
+  useEffect(() => {
+    if (!isTournament || !activeSession || !draft) return;
+    const level = activeSession.currentLevel ?? 1;
+    const structure = activeSession.structure ?? null;
+    const levelRow = structure ? getLevelRow(structure, level) : null;
+    const currentStack = latestSnapshot?.stackAmount ?? activeSession.startingStack ?? 0;
+    const effBB = levelRow ? computeEffBB(currentStack, levelRow.bb) : null;
+    const regime = effBB !== null ? getStrategyRegime(effBB) : 'cash';
+    const icmPressure = activeSession.icmPressure ?? 'chipEV';
+    setTournamentContext({ level, effBB, icmPressure, regime });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isTournament,
+    activeSession?.currentLevel,
+    activeSession?.icmPressure,
+    latestSnapshot?.stackAmount,
+    draft?.id, // re-run when a new hand starts
+  ]);
+
   if (!activeSession || !draft) {
     return <div className="screen"><div className="note" style={{ marginTop: 40 }}>Loading…</div></div>;
   }
@@ -47,6 +76,16 @@ export function PlayScreen() {
   const positions = derivePositions(tableState.occupiedSeats, tableState.buttonSeat);
   const heroPos = positions.get(tableState.heroSeat) as Position | undefined;
   const shortHanded = isShortHanded(tableState.occupiedSeats);
+
+  // Tournament level info
+  const currentLevel = activeSession.currentLevel ?? 1;
+  const structure = activeSession.structure ?? null;
+  const maxLevel = structure ? getMaxLevel(structure) : 0;
+  const levelRow = structure ? getLevelRow(structure, currentLevel) : null;
+  const currentStack = latestSnapshot?.stackAmount ?? activeSession.startingStack ?? 0;
+  const effBB = levelRow ? computeEffBB(currentStack, levelRow.bb) : null;
+  const regime = effBB !== null ? getStrategyRegime(effBB) : 'cash';
+  const icmPressure = activeSession.icmPressure ?? 'chipEV';
 
   function buildSeats(): Record<number, SeatState> {
     const result: Record<number, SeatState> = {};
@@ -99,7 +138,6 @@ export function PlayScreen() {
     const hand = toHand();
     if (hand) await handRepo.create(hand);
 
-    // Compute next button seat from current render state (before any async update)
     const { occupiedSeats, buttonSeat, heroSeat } = tableState;
     const sorted = [...occupiedSeats].sort((a, b) => a - b);
     const nextBtnSeat = sorted[(sorted.indexOf(buttonSeat) + 1) % sorted.length];
@@ -128,6 +166,15 @@ export function PlayScreen() {
     setStackModalOpen(false);
   }
 
+  async function handleLevelChange(delta: number) {
+    const next = Math.max(1, Math.min(maxLevel || 99, currentLevel + delta));
+    await setCurrentLevel(next);
+  }
+
+  async function handleIcmChange(pressure: IcmPressure) {
+    await setIcmPressure(pressure);
+  }
+
   const rec = draft.preflop.chartRecommendation
     ? displayRecommendation(draft.preflop.chartRecommendation)
     : null;
@@ -135,7 +182,9 @@ export function PlayScreen() {
   const showRecBefore = settings.showRecommendation === 'before';
   const heroActed = !!draft.preflop.heroAction;
   const recAllowed = !settings.focusRFI || draft.preflop.scenario === 'RFI';
-  const showRec = rec && recAllowed && (showRecBefore || (heroActed && settings.showChartAfterFold));
+
+  // T0: In tournament mode, NEVER show recommendation during live hand
+  const showRec = !isTournament && rec && recAllowed && (showRecBefore || (heroActed && settings.showChartAfterFold));
 
   const facingDesc = draft.preflop.facingPosition
     ? `facing ${draft.preflop.facingPosition} ${draft.preflop.scenario === 'RFIvs3Bet' ? '3-bet' : 'raise'}`
@@ -158,6 +207,19 @@ export function PlayScreen() {
           session={activeSession}
           currentStack={latestSnapshot?.stackAmount ?? activeSession.startingStack}
           currency={settings.currency}
+        />
+      )}
+
+      {isTournament && (
+        <TournamentInfoRow
+          levelRow={levelRow}
+          currentLevel={currentLevel}
+          maxLevel={maxLevel}
+          effBB={effBB}
+          regime={regime}
+          icmPressure={icmPressure}
+          onLevelChange={handleLevelChange}
+          onIcmChange={handleIcmChange}
         />
       )}
 
@@ -187,6 +249,9 @@ export function PlayScreen() {
         Your position: <strong>{heroPos ?? '?'}</strong>
         {facingDesc && ` · ${facingDesc}`}
         {shortHanded && <span className={styles.shortHandedNote}> · short-handed (9-max chart)</span>}
+        {isTournament && effBB !== null && (
+          <span> · <strong>{effBB.toFixed(1)} BB</strong> · {regime === 'pushfold' ? 'Push/fold' : 'Charts'}</span>
+        )}
       </div>
 
       <div className={styles.cardsRow}>
@@ -216,9 +281,14 @@ export function PlayScreen() {
           >{rec}</button>
         </div>
       )}
-      {rec && !showRec && !showRecBefore && !heroActed && (
+      {!isTournament && rec && !showRec && !showRecBefore && !heroActed && (
         <div className={styles.recRow}>
           <span className="label">Act first — chart shown after</span>
+        </div>
+      )}
+      {isTournament && !heroActed && (
+        <div className={styles.recRow}>
+          <span className="label">Chart shown after hand (tournament rules)</span>
         </div>
       )}
 
@@ -251,7 +321,7 @@ export function PlayScreen() {
             </Dialog.Description>
             <input
               className="field"
-              placeholder={`${settings.currency}0`}
+              placeholder={isTournament ? 'Chips' : `${settings.currency}0`}
               value={stackInput}
               onChange={(e) => setStackInput(e.target.value)}
               type="number"
@@ -267,6 +337,48 @@ export function PlayScreen() {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
+    </div>
+  );
+}
+
+function TournamentInfoRow({
+  levelRow,
+  currentLevel,
+  maxLevel,
+  effBB,
+  regime,
+  icmPressure,
+  onLevelChange,
+  onIcmChange,
+}: {
+  levelRow: ReturnType<typeof getLevelRow>;
+  currentLevel: number;
+  maxLevel: number;
+  effBB: number | null;
+  regime: 'cash' | 'pushfold';
+  icmPressure: IcmPressure;
+  onLevelChange(delta: number): void;
+  onIcmChange(p: IcmPressure): void;
+}) {
+  return (
+    <div className={styles.tournamentRow}>
+      <div className={styles.levelControl}>
+        <button className={styles.levelBtn} onClick={() => onLevelChange(-1)} disabled={currentLevel <= 1}>−</button>
+        <span className={styles.levelLabel}>
+          L{currentLevel}
+          {levelRow && <span className={styles.blindsLabel}> · {formatBlinds(levelRow)}</span>}
+        </span>
+        <button className={styles.levelBtn} onClick={() => onLevelChange(1)} disabled={maxLevel > 0 && currentLevel >= maxLevel}>+</button>
+      </div>
+      <div className={styles.icmRow}>
+        {(['chipEV', 'nearBubble', 'finalTable'] as IcmPressure[]).map((p) => (
+          <button
+            key={p}
+            className={`chip ${icmPressure === p ? 'selected' : ''}`}
+            onClick={() => onIcmChange(p)}
+          >{ICM_LABELS[p]}</button>
+        ))}
+      </div>
     </div>
   );
 }

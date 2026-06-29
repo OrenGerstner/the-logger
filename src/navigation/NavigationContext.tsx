@@ -11,7 +11,8 @@ export type ScreenName =
   | 'handHistory'
   | 'pastSessions'
   | 'sessionDetail'
-  | 'settings';
+  | 'settings'
+  | 'structureEditor';
 
 export interface Screen {
   name: ScreenName;

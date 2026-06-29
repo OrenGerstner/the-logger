@@ -9,6 +9,7 @@ import type {
   BoardCards,
   PostflopActions,
   Hand,
+  IcmPressure,
 } from '@/domain/types';
 import { normalizeHand } from '@/domain/handNormalizer';
 import { resolveFirstDecisionScenario, resolveSecondDecisionScenario } from '@/domain/scenarioResolver';
@@ -24,6 +25,13 @@ export interface HandDraftPreflop {
   heroSecondAction?: HeroAction | null;
   opponentActions: OpponentAction[];
   deviation?: boolean;
+}
+
+export interface TournamentHandContext {
+  level: number;
+  effBB: number | null;
+  icmPressure: IcmPressure;
+  regime: 'cash' | 'pushfold' | 'offchart';
 }
 
 export interface HandDraft {
@@ -47,6 +55,7 @@ export interface HandDraft {
   stackBefore?: number | null;
   stackAfter?: number | null;
   note?: string;
+  tournamentContext?: TournamentHandContext | null;
 }
 
 interface HandCtx {
@@ -71,6 +80,7 @@ interface HandCtx {
   setAmount(amount: number | null): void;
   setNote(note: string): void;
   setStackAfter(stack: number): void;
+  setTournamentContext(ctx: TournamentHandContext | null): void;
   toHand(): Hand | null;
   clearDraft(): void;
 }
@@ -234,6 +244,10 @@ export function HandProvider({ children }: { children: React.ReactNode }) {
     setDraft((prev) => prev ? { ...prev, stackAfter: stack } : prev);
   }, []);
 
+  const setTournamentContext = useCallback((ctx: TournamentHandContext | null) => {
+    setDraft((prev) => prev ? { ...prev, tournamentContext: ctx } : prev);
+  }, []);
+
   const toHand = useCallback((): Hand | null => {
     const d = draft;
     if (!d || !d.holeCards || !d.handKey) return null;
@@ -268,6 +282,11 @@ export function HandProvider({ children }: { children: React.ReactNode }) {
       stackAfter: d.stackAfter ?? null,
       stackAttributionConfidence: null,
       note: d.note ?? '',
+      level: d.tournamentContext?.level ?? null,
+      effBB: d.tournamentContext?.effBB ?? null,
+      regime: d.tournamentContext?.regime ?? null,
+      pushFoldRec: null, // filled by caller (HandResult) at save time
+      icmPressureAtHand: d.tournamentContext?.icmPressure ?? null,
     };
   }, [draft]);
 
@@ -289,6 +308,7 @@ export function HandProvider({ children }: { children: React.ReactNode }) {
       setAmount,
       setNote,
       setStackAfter,
+      setTournamentContext,
       toHand,
       clearDraft,
     }}>

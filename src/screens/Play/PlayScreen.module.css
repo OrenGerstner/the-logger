@@ -151,6 +151,59 @@
   text-align: center;
 }
 
+/* Tournament info row */
+.tournamentRow {
+  padding: 6px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 0.5px solid var(--bt);
+  margin-bottom: 2px;
+}
+
+.levelControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.levelBtn {
+  background: var(--secondary);
+  border: 0.5px solid var(--bs);
+  border-radius: 6px;
+  color: var(--t1);
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.levelBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.levelLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.blindsLabel {
+  font-weight: 400;
+  color: var(--t2);
+}
+
+.icmRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 /* Target progress bar */
 .targetBar {
   padding: 6px 0 4px;

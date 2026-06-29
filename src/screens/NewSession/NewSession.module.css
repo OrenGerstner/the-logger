@@ -14,3 +14,30 @@
   color: var(--t2);
   font-size: 16px;
 }
+
+.structureCard {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0.5px solid var(--bs);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--secondary);
+  margin-bottom: 2px;
+}
+
+.structureName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--t1);
+}
+
+.changeStructure {
+  background: none;
+  border: none;
+  color: var(--it);
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 2px 6px;
+}
